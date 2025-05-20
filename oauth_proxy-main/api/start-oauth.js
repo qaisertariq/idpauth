@@ -15,7 +15,7 @@ const oauth = OAuth({
 
 export default async function handler(req, res) {
   try {
-    const callbackBaseUrl = 'https://oauth-proxy-chi.vercel.app/api/callback'; 
+    const callbackBaseUrl = 'https://idpauth.vercel.app/api/callback'; 
     const requestTokenUrl = 'https://api.smugmug.com/services/oauth/1.0a/getRequestToken';
     const data = {
       oauth_callback: callbackBaseUrl,
