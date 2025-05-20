@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     }
 
     // Redirect user back to your Bubble app with access token and secret as query params
-    const bubbleRedirectUrl = `https://smugmug-integration.bubbleapps.io/version-test?access_token=${encodeURIComponent(accessToken)}&access_secret=${encodeURIComponent(accessTokenSecret)}`;
+    const bubbleRedirectUrl = `https://idp-99152.bubbleapps.io/version-test?access_token=${encodeURIComponent(accessToken)}&access_secret=${encodeURIComponent(accessTokenSecret)}`;
 
     res.redirect(bubbleRedirectUrl);
 
