@@ -2,7 +2,7 @@ const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'PATCH') {
+  if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
       });
 
       const url = `https://api.smugmug.com/api/v2/folder/user/${nickname}/${oldfolder}!folders`;
-      const method = 'PATCH';
+      const method = 'POST';
       const data = {
         Name: folderName,
         UrlName: folderName.replace(/\s+/g, ''),
