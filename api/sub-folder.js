@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
         },
       });
 
-      const url = `https://api.smugmug.com/api/v2/folder/user/${mainfolder}/${nickname}!folders`;
+      const url = `https://api.smugmug.com/api/v2/folder/user/${nickname}!folders/${mainfolder}`;
       const method = 'POST';
       const data = {
         Name: folderName,
