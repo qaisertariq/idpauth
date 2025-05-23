@@ -31,14 +31,12 @@ module.exports = async (req, res) => {
           return crypto.createHmac('sha1', key).update(base_string).digest('base64');
         },
       });
-      const water = "/api/v2/watermark/wm-484921";
       const url = `https://api.smugmug.com/api/v2/folder/user/${nickname}/${mainfolder}/${subfolder}!albums`;
       const method = 'POST';
       const data = {
         Name: folderName,
         UrlName: urlname,
         Privacy: privacy,
-        WatermarkUri: water
       };
 
       const authHeader = oauth.toHeader(
