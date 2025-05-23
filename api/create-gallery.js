@@ -36,7 +36,9 @@ module.exports = async (req, res) => {
       const data = {
         Name: folderName,
         UrlName: urlname,
-        Privacy: privacy
+        Privacy: privacy,
+        WatermarkUri: "484921",
+        Watermark: true
       };
 
       const authHeader = oauth.toHeader(
