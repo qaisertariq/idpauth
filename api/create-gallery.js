@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
       const data = {
         Name: folderName,
         UrlName: urlname,
-        Privacy: privacy,
+        Privacy: privacy
       };
 
       const authHeader = oauth.toHeader(
