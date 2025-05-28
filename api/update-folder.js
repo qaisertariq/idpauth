@@ -32,10 +32,10 @@ module.exports = async (req, res) => {
         },
       });
 
-      const url = `https://api.smugmug.com/api/v2/album/${urlname}`;
+      const url = `https://api.smugmug.com/api/v2/node/${urlname}`;
       const method = 'PATCH';
       const data = {
-        Watermark: null
+         Name: folderName,
       };
 
       const authHeader = oauth.toHeader(
