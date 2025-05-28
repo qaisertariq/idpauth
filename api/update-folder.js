@@ -36,7 +36,6 @@ module.exports = async (req, res) => {
       const method = 'PATCH';
       const data = {
         Name: folderName,
-        UrlName: urlname,
         Privacy: privacy
       };
 
