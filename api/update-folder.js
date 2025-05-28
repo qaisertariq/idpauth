@@ -35,8 +35,7 @@ module.exports = async (req, res) => {
       const url = `https://api.smugmug.com/api/v2/node/${urlname}`;
       const method = 'PATCH';
       const data = {
-        Name: folderName,
-        Privacy: privacy
+        Watermark: false
       };
 
       const authHeader = oauth.toHeader(
