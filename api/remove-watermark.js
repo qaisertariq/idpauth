@@ -2,7 +2,7 @@ const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
+  if (req.method !== 'PATCH') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy } = JSON.parse(body);
+      const { accessToken, accessTokenSecret, nodeID } = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname ||!privacy) {
+      if (!accessToken || !accessTokenSecret || !nodeID) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -32,12 +32,10 @@ module.exports = async (req, res) => {
         },
       });
 
-      const url = `https://api.smugmug.com/api/v2/folder/user/${nickname}!folders`;
-      const method = 'POST';
+      const url = `https://api.smugmug.com/api/v2/album/${nodeID}`;
+      const method = 'PATCH';
       const data = {
-        Name: folderName,
-        UrlName: urlname,
-        Privacy: privacy
+        Watermark : false
       };
 
       const authHeader = oauth.toHeader(
