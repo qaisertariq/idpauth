@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy } = JSON.parse(body);
+      const { accessToken, accessTokenSecret, albumKey } = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname ||!privacy) {
+      if (!accessToken || !accessTokenSecret || !albumKey) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -32,13 +32,8 @@ module.exports = async (req, res) => {
         },
       });
 
-      const url = `https://api.smugmug.com/api/v2/folder/user/${nickname}!folders`;
-      const method = 'POST';
-      const data = {
-        Name: folderName,
-        UrlName: urlname,
-        Privacy: privacy
-      };
+      const url = `https://api.smugmug.com/api/v2/album/${albumKey}!images`;
+      const method = 'GET';
 
       const authHeader = oauth.toHeader(
         oauth.authorize({ url, method }, { key: accessToken, secret: accessTokenSecret })
@@ -48,19 +43,17 @@ module.exports = async (req, res) => {
         method,
         headers: {
           Authorization: authHeader.Authorization,
-          'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(data),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        return res.status(response.status).json({ error: 'Failed to create folder', details: result });
+        return res.status(response.status).json({ error: 'Failed to fetch album images', details: result });
       }
 
-      return res.status(200).json({ message: 'Folder created successfully', result });
+      return res.status(200).json({ message: 'Album images fetched successfully', images: result.Response?.AlbumImage || [] });
     } catch (err) {
       return res.status(500).json({ error: 'Unexpected error', details: err.message });
     }
