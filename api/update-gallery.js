@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, urlname, privacy, templateuri} = JSON.parse(body);
+      const { accessToken, accessTokenSecret, nickname, urlname, privacy, templateuri, mainfolder, subfolder} = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !urlname ||!privacy || !templateuri) {
+      if (!accessToken || !accessTokenSecret || !nickname || !urlname ||!privacy || !templateuri || !mainfolder || !subfolder) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
           return crypto.createHmac('sha1', key).update(base_string).digest('base64');
         },
       });
-      const url = `https://api.smugmug.com/api/v2/album/${urlname}`;
+      const url = `https://api.smugmug.com/api/v2/node/${urlname}`;
       const method = 'PATCH';
       const data = {
         
