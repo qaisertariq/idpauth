@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, urlname, privacy, templateuri, mainfolder, subfolder} = JSON.parse(body);
+      const { accessToken, accessTokenSecret, urlname, privacy, templateuri} = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !urlname ||!privacy || !templateuri || !mainfolder || !subfolder) {
+      if (!accessToken || !accessTokenSecret || !urlname || !privacy || !templateuri) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
