@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy, mainfolder, subfolder, waturi } = JSON.parse(body);
+      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy, mainfolder, subfolder, templateuri} = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname ||!privacy || !mainfolder || !subfolder || !waturi) {
+      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname ||!privacy || !mainfolder || !subfolder || !templateuri) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -37,8 +37,7 @@ module.exports = async (req, res) => {
         Name: folderName,
         UrlName: urlname,
         Privacy: privacy,
-        WatermarkUri: waturi,
-        Watermark: true
+        AlbumTemplateUri: templateuri 
       };
 
       const authHeader = oauth.toHeader(
