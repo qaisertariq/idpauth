@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy } = JSON.parse(body);
+      const { accessToken, accessTokenSecret, nickname } = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname ||!privacy) {
+      if (!accessToken || !accessTokenSecret || !nickname) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -32,13 +32,9 @@ module.exports = async (req, res) => {
         },
       });
 
-      const url = `https://api.smugmug.com/api/v2/folder/user/${nickname}!folders`;
-      const method = 'POST';
-      const data = {
-        Name: folderName,
-        UrlName: urlname,
-        Privacy: privacy
-      };
+      const url = `https://api.smugmug.com/api/v2/user/${nickname}!albumtemplates`;
+      const method = 'GET';
+     
 
       const authHeader = oauth.toHeader(
         oauth.authorize({ url, method }, { key: accessToken, secret: accessTokenSecret })
@@ -51,7 +47,7 @@ module.exports = async (req, res) => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(data),
+        
       });
 
       const result = await response.json();
