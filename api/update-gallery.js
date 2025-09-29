@@ -2,7 +2,7 @@ const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
+  if (req.method !== 'PATCH') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, urlname, privacy, templateuri} = JSON.parse(body);
+      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy, templateuri} = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !urlname || !privacy || !templateuri) {
+      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname || !privacy || !templateuri) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -31,11 +31,10 @@ module.exports = async (req, res) => {
           return crypto.createHmac('sha1', key).update(base_string).digest('base64');
         },
       });
+
       const url = `https://api.smugmug.com/api/v2/node/${urlname}`;
       const method = 'PATCH';
       const data = {
-        
-        Privacy: privacy,
         AlbumTemplateUri: templateuri 
       };
 
@@ -56,7 +55,7 @@ module.exports = async (req, res) => {
       const result = await response.json();
 
       if (!response.ok) {
-        return res.status(response.status).json({ error: 'Failed to create folder', details: result });
+        return res.status(response.status).json({ error: 'Failed', details: result });
       }
 
       return res.status(200).json({ message: 'Folder created successfully', result });
