@@ -38,9 +38,14 @@ module.exports = async (req, res) => {
         AlbumTemplateUri: templateuri 
       };
 
-      const authHeader = oauth.toHeader(
-        oauth.authorize({ url, method }, { key: accessToken, secret: accessTokenSecret })
-      );
+
+      const request_data = { url, method };
+      const token = { key: accessToken, secret: accessTokenSecret };
+      const oauth_data = oauth.authorize(request_data, token);
+      oauth_data.oauth_nonce = crypto.randomUUID().replace(/-/g, ''); 
+      const authHeader = oauth.toHeader(oauth_data);
+
+      
 
       const response = await fetch(url, {
         method,
