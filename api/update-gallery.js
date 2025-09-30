@@ -34,18 +34,37 @@ module.exports = async (req, res) => {
 
       const url = `https://api.smugmug.com/api/v2/node/${urlname}`;
       const method = 'PATCH';
+
       const data = {
-        AlbumTemplateUri: templateuri 
+          Privacy: "Unlisted",
+          WorldSearchable: "No",
+          SmugSearchable: "No",
+          HideOwner: false,
+          LargestSize: "Original",  // Max display size
+          CanRank: false,  // Right-click message (inferred as OFF)
+          Watermarking: false,  // Apply watermark OFF
+          WatermarkUri: "",  // Clear selected watermark
+          AllowDownloads: true,  // Download buttons ON
+          OriginalSizes: true,  // Download size Original
+          Comments: false,  // Allow comments OFF
+          Share: true,  // Show sharing options ON
+          GuestUploading: true,  // Visitor shopping cart ON (if this maps; verify)
+          ProofDays: 0,  // Proof delay OFF
+          BoutiquePackaging: "Site-Setting",
+          PersonalDelivery: "Site-Setting",
+          BrandPackaging: true,  // ON
+          PrintmarkUri: "",  // Printmark -
+          Backprinting: "www.islanddreamproductions.com",
+          SortMethod: "Position",
+          SortDirection: "Descending",
+        
       };
-
-
-      const request_data = { url, method };
-      const token = { key: accessToken, secret: accessTokenSecret };
-      const oauth_data = oauth.authorize(request_data, token);
-      oauth_data.oauth_nonce = crypto.randomUUID().replace(/-/g, ''); 
-      const authHeader = oauth.toHeader(oauth_data);
-
       
+
+      const authHeader = oauth.toHeader(
+        oauth.authorize({ url, method }, { key: accessToken, secret: accessTokenSecret })
+      );
+    
 
       const response = await fetch(url, {
         method,
