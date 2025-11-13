@@ -2,7 +2,7 @@ const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'PATCH') {
+  if (req.method !== 'DELETE') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
@@ -15,9 +15,9 @@ module.exports = async (req, res) => {
 
   req.on('end', async () => {
     try {
-      const { accessToken, accessTokenSecret, nickname, folderName, urlname, privacy } = JSON.parse(body);
+      const { accessToken, accessTokenSecret, urlname } = JSON.parse(body);
 
-      if (!accessToken || !accessTokenSecret || !nickname || !folderName || !urlname ||!privacy) {
+      if (!accessToken || !accessTokenSecret || !urlname) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
@@ -33,10 +33,7 @@ module.exports = async (req, res) => {
       });
 
       const url = `https://api.smugmug.com/api/v2/node/${urlname}`;
-      const method = 'PATCH';
-      const data = {
-         Name: folderName,
-      };
+      const method = 'DELETE';
 
       const authHeader = oauth.toHeader(
         oauth.authorize({ url, method }, { key: accessToken, secret: accessTokenSecret })
@@ -46,19 +43,21 @@ module.exports = async (req, res) => {
         method,
         headers: {
           Authorization: authHeader.Authorization,
-          'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        return res.status(response.status).json({ error: 'Failed to create folder', details: result });
+      if (response.status === 204) {
+        // SmugMug returns 204 No Content for successful delete
+        return res.status(200).json({ message: 'Folder deleted successfully' });
       }
 
-      return res.status(200).json({ message: 'Folder created successfully', result });
+      const result = await response.json();
+      if (!response.ok) {
+        return res.status(response.status).json({ error: 'Failed to delete folder', details: result });
+      }
+
+      return res.status(200).json({ message: 'Folder deleted successfully', result });
     } catch (err) {
       return res.status(500).json({ error: 'Unexpected error', details: err.message });
     }
