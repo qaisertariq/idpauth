@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
 
       const data = {
                     Privacy: "Unlisted",
-                    AllowDownloads: true,  
+                    AllowDownloads: false,  
                     CanRank: true,
                     Clean: false,
                     Comments: false,
